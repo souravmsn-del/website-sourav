@@ -1,0 +1,320 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IT Technical Support — Portfolio</title>
+  <meta name="description" content="souravtk." />
+  <style>
+    :root{
+      --bg1: linear-gradient(135deg,#0f172a 0%, #0f172a 40%, #0ea5a3 100%);
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.06);
+      --accent1: #06b6d4;
+      --accent2: #60a5fa;
+      --accent3: #f472b6;
+      --text: #e6eef6;
+      --muted: rgba(230,238,246,0.7);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg1);color:var(--text);}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:28px}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent2),var(--accent1));box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+    .logo svg{width:34px;height:34px}
+    nav{display:flex;gap:14px;align-items:center}
+    .btn{background:linear-gradient(90deg,var(--accent3),var(--accent2));padding:10px 14px;border-radius:10px;color:#031025;font-weight:600}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-top:28px}
+    @media (max-width:880px){.hero{grid-template-columns:1fr;}.hero-right{order:-1}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:20px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.04)}
+
+    h1{margin:0;font-size:clamp(28px,4vw,40px);line-height:1.02}
+    p.lead{color:var(--muted);margin:12px 0 18px}
+
+    .skill-badges{display:flex;flex-wrap:wrap;gap:10px}
+    .badge{background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);font-weight:600}
+
+    /* Stats */
+    .stats{display:flex;gap:12px;margin-top:18px}
+    .stat{flex:1;padding:12px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));text-align:center}
+    .stat strong{display:block;font-size:20px}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* Projects grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+    @media (max-width:880px){.grid{grid-template-columns:repeat(1,1fr)}}
+    .project{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));min-height:110px}
+    .project h3{margin:0 0 6px}
+    .project p{margin:0;color:var(--muted)}
+
+    /* Skills list */
+    .skills-list{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+    .skill-pill{background:var(--card);padding:10px 12px;border-radius:10px;font-weight:600}
+
+    /* Contact */
+    form{display:grid;gap:10px}
+    input,textarea{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:12px;border-radius:10px;color:var(--text);outline:none}
+    input:focus,textarea:focus{box-shadow:0 4px 18px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.12)}
+    .row{display:flex;gap:10px}
+    @media (max-width:640px){.row{flex-direction:column}}
+
+    footer{margin-top:28px;text-align:center;color:var(--muted);font-size:13px}
+
+    /* small touches */
+    .tag{display:inline-block;padding:6px 8px;border-radius:8px;font-size:13px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#02101a}
+    .hero-right{display:grid;gap:12px}
+
+    /* animations */
+    .fade-up{animation:fadeUp .7s ease both}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    .center{display:grid;place-items:center}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden>
+          <!-- simple server/network icon -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="6" rx="1.5" fill="#fff" opacity="0.12"/><rect x="3" y="14" width="18" height="6" rx="1.5" fill="#fff" opacity="0.08"/><path d="M8 10v4M16 10v4" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/></svg>
+        </div>
+        <div>
+          <div style="font-weight:700">SOURAV TK</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:3px">IT Technical Support • Networking • Server Administration</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#projects" class="btn">Projects</a>
+        <a href="#skills" class="btn">Skills</a>
+        <a href="#contact" class="btn">Contact</a>
+        <a href="./invoice.html" class="btn">Invoice-Billing</a>
+         <a href="./enquiry.html" class="btn">Enquiry</a>
+         
+         
+</a>
+
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="card fade-up">
+          <h1>IT Technical Support  keeping systems healthy, users happier.</h1>
+          <p class="lead">Experienced in Windows & Linux server support, network troubleshooting, backup, and endpoint management. Fast incident response, clear documentation and friendly user training.</p>
+
+          <div class="skill-badges">
+            <span class="badge">Server Administration</span>
+            <span class="badge">Networking</span>
+            <span class="badge">Active Directory</span>
+            <span class="badge">Troubleshooting</span>
+            <span class="badge">Cloud</span>
+            <span class="badge">Helpdesk</span>
+            <spam class="badge">C,C+</spam>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>7+</strong>
+              <div class="muted">Years experience</div>
+            </div>
+            <div class="stat">
+              <strong>1-24h</strong>
+              <div class="muted">Response SLA typical</div>
+            </div>
+            <div class="stat">
+              <strong>99.9%</strong>
+              <div class="muted">Systems uptime (avg)</div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;gap:12px;align-items:center">
+            <a href="#contact" class="btn">Contact</a>
+            <a href="#projects" style="padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04)">View projects</a>
+          </div>
+        </div>
+
+        <aside class="hero-right">
+          <div class="card center">
+            <!-- simple network diagram illustration -->
+            <svg width="360" height="220" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop offset="0" stop-color="#60a5fa" stop-opacity="0.95"/>
+                  <stop offset="1" stop-color="#06b6d4" stop-opacity="0.95"/>
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="344" height="204" rx="12" fill="url(#g1)" opacity="0.08"/>
+              <g fill="#fff" opacity="0.95">
+                <rect x="146" y="22" width="68" height="46" rx="6" fill="#fff" opacity="0.08"/>
+                <rect x="32" y="130" width="68" height="46" rx="6" fill="#fff" opacity="0.08"/>
+                <rect x="260" y="130" width="68" height="46" rx="6" fill="#fff" opacity="0.08"/>
+              </g>
+              <g stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-opacity="0.9" fill="none">
+                <path d="M180 68v44"/>
+                <path d="M68 152h44"/>
+                <path d="M248 152h44"/>
+                <path d="M110 120L150 92"/>
+                <path d="M250 92L290 120"/>
+              </g>
+            </svg>
+            <div style="margin-top:10px;color:var(--muted);font-size:13px">Network design • Server clusters • Backup plans</div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0">Availability</h3>
+            <p class="muted" style="margin-bottom:8px">Remote & On-site — weekdays and emergency on-call support available.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="tag">Windows Server</span>
+              <span class="tag">Linux</span>
+              <span class="tag">Cisco</span>
+               <span class="tag">Aws</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0">Certificate</h3>
+            <div class="skills-list">
+              <span class="skill-pill">Computer Hardware & Networking</span>
+              <span class="skill-pill">CCNA</span>
+              <span class="skill-pill">MCSA</span>
+              <span class="skill-pill">AWS , AZURE</span>
+              <span class="skill-pill"> HCSA</span>
+              <span class="skill-pill">Sophos XG Firewall Administration</span>
+              <span class="skill-pill">VM WARE</span>
+              <span class="skill-pill">HYPER-V</span>
+              <span class="skill-pill">SONIC WALL</span>
+              <span class="skill-pill">HTML,CSS,JAVA-SCRIPT,Node JS,Sql</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="projects" style="margin-top:26px">
+        <h2 style="margin:0 0 8px">Projects & Wins</h2>
+        <div class="grid">
+          <article class="project card">
+            <h3>IT Infrastructure Setup – Greens Hyper Market, Thalap Store Renovation</h3>
+            <p>As part of the renovation and modernization of the Greens Hyper Market Thalap branch, a complete overhaul of the IT infrastructure was carried out. The scope of work included structured networking setup, server deployment, and advanced firewall implementation to enhance data security, operational efficiency, and support for POS, CCTV, and other in-store digital systems.</p>
+          </article>
+          <article class="project card">
+            <h3>IT Infrastructure Project: Grand Hyper – Payyanur Branch</h3>
+            <p>As part of the launch of the new Grand Hypermarket outlet in Payyanur, a full-scale IT infrastructure project was executed. The scope covered the installation and configuration of a centralized server system, structured networking, advanced CCTV surveillance system, and Point of Sale (POS) terminals across all departments to support smooth retail operations and security compliance.</p>
+          </article>
+          <article class="project card">
+            <h3>Grand Hyper – Karukappalli, Ernakulam</h3>
+            <p>A complete IT infrastructure setup for the launch of a new Grand Hypermarket store in Karukappalli, Ernakulam. My responsibilities included:</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills" style="margin-top:26px">
+        <h2 style="margin:0 0 8px">Technical Skills</h2>
+        <div class="card" style="padding:16px">
+          <div class="skills-list">
+            <div class="skill-pill">Active Directory & Group Policy</div>
+            <div class="skill-pill">Windows Server (2012–2022)</div>
+            <div class="skill-pill">Linux (Ubuntu, CentOS, RedHate)</div>
+            <div class="skill-pill">Networking (TCP/IP, VLANs)</div>
+            <div class="skill-pill">Firewalls & VPNs</div>
+            <div class="skill-pill">Scripting: PowerShell, Bash</div>
+            <div class="skill-pill">Cloud: Aws , Azure </div>
+            <div class="skill-pill">Endpoint Management</div>
+            <div class="skill-pill">Hardware troubleshooting</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" style="margin-top:26px">
+        <h2 style="margin:0 0 8px">Experience</h2>
+        <div class="card" style="padding:14px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div>
+              <strong>IT Manager— Greens</strong>
+              <div class="muted">2021 — Present</div>
+              <div class="muted" style="margin-top:6px">Currently working as an IT Manager at Green’s Hypermarket, leading projects in networking, firewall configuration, server deployment, and cloud monitoring to ensure secure and reliable IT operations.</div>
+            </div>
+            <div>
+              <strong>IT Support — Logic Data Systems</strong>
+              <div class="muted">2018 — 2021</div>
+              <div class="muted" style="margin-top:6px">First-line support, imaging, asset tracking and small network setups for branch offices.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" style="margin-top:26px">
+        <h2 style="margin:0 0 8px">Contact / Enquiry</h2>
+        <div class="card" style="padding:16px">
+          <form id="contactForm">
+            <input type="text" id="name" placeholder="Your name" required />
+            <div class="row">
+              <input type="email" id="email" placeholder="Your email" required />
+              <input type="text" id="phone" placeholder="Phone (optional)" />
+            </div>
+            <input type="text" id="subject" placeholder="Subject" required />
+            <textarea id="message" rows="5" placeholder="Describe your request" required></textarea>
+
+            <div style="display:flex;gap:10px;align-items:center">
+              <button type="submit" class="btn">Send enquiry</button>
+              <div id="formStatus" style="color:var(--muted);font-size:14px"></div>
+            </div>
+          </form>
+
+          <div style="margin-top:12px;color:var(--muted);font-size:13px"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      Built by Sourav • Available for freelance & permanent roles • <span style="color:var(--muted)">Email: souravmsn@gmail.com web:www.souravtk.in</span>
+    </footer>
+  </div>
+
+  <script>
+  // Paste the URL you copied from the web app deployment
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwgYlhXjCk8k2gcYS8uZP4vOWU-YLnic0K6HxrG_8-fvVkUowadTd1A23NFiCEYxb5T/exec';
+
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.textContent = 'Sending...';
+
+    // Use form-encoded body to avoid CORS preflight
+    const fd = new FormData(form);
+    fd.append('source', location.hostname || 'web');
+    const body = new URLSearchParams(fd).toString();
+
+    try {
+      // Use no-cors so the POST succeeds even if response headers block reads.
+      await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body
+      });
+
+      // We can't read the response in no-cors mode, so optimistically confirm.
+      status.textContent = 'Sent! I will reply soon.';
+      form.reset();
+    } catch (err) {
+      console.warn(err);
+      status.innerHTML = 'Could not send. Please email <b>souravmsn@gmail.com</b>.';
+    }
+  });
+</script>
+
+</body>
+</html>

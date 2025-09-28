@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Enquiry Form</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --danger:#ef4444; --ring:#374151;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:Inter,system-ui,Arial,sans-serif; background:linear-gradient(120deg,#0b1020,#111827);}
+  .wrap{min-height:100svh; display:grid; place-items:center; padding:24px}
+  .card{width:100%; max-width:680px; background:var(--card); color:var(--text); border:1px solid #1f2937; border-radius:20px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  h1{margin:0 0 8px; font-size:28px}
+  p.lead{margin:0 0 20px; color:var(--muted)}
+  .grid{display:grid; gap:14px}
+  @media(min-width:720px){ .grid{grid-template-columns:1fr 1fr} .grid .full{grid-column:1 / -1} }
+  label{display:block; font-weight:600; margin:6px 0}
+  input, textarea{
+    width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--ring); background:#0b1220; color:var(--text);
+    outline:none; box-shadow:0 0 0 0 rgba(0,0,0,0); transition:.15s;
+  }
+  input:focus, textarea:focus{border-color:#334155; box-shadow:0 0 0 4px rgba(51,65,85,.35)}
+  textarea{min-height:140px; resize:vertical}
+  .hp{position:absolute; left:-9999px; top:-9999px; visibility:hidden} /* honeypot */
+  .actions{display:flex; gap:10px; align-items:center; margin-top:10px}
+  button{
+    padding:12px 16px; border-radius:12px; border:1px solid #16a34a; background:linear-gradient(180deg,#22c55e,#16a34a);
+    color:#052e16; font-weight:700; cursor:pointer; transition:.15s
+  }
+  button:disabled{opacity:.6; cursor:not-allowed}
+  .note{font-size:13px; color:var(--muted)}
+  .alert{margin-top:10px; padding:10px 12px; border-radius:10px; display:none}
+  .alert.ok{background:#052e16; color:#86efac; border:1px solid #14532d}
+  .alert.err{background:#3f1d1d; color:#fecaca; border:1px solid #7f1d1d}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <form id="enquiryForm" class="card" novalidate>
+      <h1>Contact / Enquiry</h1>
+      <p class="lead">Fill this form and we’ll reach out by email.</p>
+
+      <div class="grid">
+        <div>
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" placeholder="" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="" required />
+        </div>
+        <div>
+          <label for="phone">Phone (optional)</label>
+          <input id="phone" name="phone" type="tel" placeholder="" />
+        </div>
+        <div>
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject" type="text" placeholder="" required />
+        </div>
+
+        <div class="full">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us a bit more..." required></textarea>
+        </div>
+      </div>
+
+      <!-- honeypot field: humans won’t see/fill this -->
+      <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" />
+
+      <div class="actions">
+        <button id="submitBtn" type="submit">Send Enquiry</button>
+        <span class="note"></span>
+      </div>
+
+      <div id="ok" class="alert ok">Thanks! Your enquiry was sent.</div>
+      <div id="err" class="alert err">Oops—couldn’t send. Please try again.</div>
+    </form>
+  </div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwDbwtIj5LJDG5y7i6I6CYnkwDkKVoTpwTlm1oiNIvK5tm_zkdE5D6Y_rbKR56UPz8g/exec'; // <-- paste your Web App URL
+
+const form = document.getElementById('enquiryForm');
+const btn = document.getElementById('submitBtn');
+const ok = document.getElementById('ok');
+const err = document.getElementById('err');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  ok.style.display = 'none';
+  err.style.display = 'none';
+
+  if (!form.reportValidity()) return;
+
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    // Send FormData (avoids CORS preflight; Apps Script reads e.parameter)
+    const res = await fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form) });
+    let data = {};
+    try { data = await res.json(); } catch(_) {}
+    if (res.ok && data.ok) {
+      ok.style.display = 'block';
+      form.reset();
+    } else {
+      throw new Error(data.msg || 'Failed');
+    }
+  } catch (e) {
+    console.error(e);
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send Enquiry';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice Billing Web</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    footer.site-footer {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;                      /* text color */
+  padding: 14px;
+  margin-top: 20px;
+  border-top: none;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); 
+  /* gradient from your theme colors */
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+}
+
+
+    :root{
+      --accent:#5b7fff;   /* primary */
+      --accent-2:#00c2a8; /* secondary */
+      --ink:#111827;
+      --muted:#6b7280;
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --danger:#ef4444;
+      --ok:#10b981;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      color:var(--ink); background:linear-gradient(120deg,#f7fbff, #f3fff8);
+    }
+    .container{ max-width:1080px; margin:auto; padding:20px; }
+
+    .app{
+      background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden;
+      box-shadow: 0 10px 30px rgba(17,24,39,.08);
+    }
+
+    header.topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:16px 18px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:white;
+    }
+    header .title{ font-weight:700; letter-spacing:0.3px }
+    header .actions{ display:flex; gap:10px; flex-wrap:wrap }
+    button, .btn{
+      appearance:none; border:1px solid transparent; background:var(--accent); color:white; font-weight:600;
+      padding:10px 14px; border-radius:10px; cursor:pointer; transition:.2s transform, .2s box-shadow, .2s background;
+      box-shadow:0 6px 18px rgba(91,127,255,.25);
+    }
+    button:hover{ transform:translateY(-1px) }
+    button.secondary{ background:var(--accent-2); box-shadow:0 6px 18px rgba(0,194,168,.25) }
+    button.ghost{ background:transparent; color:white; border-color:rgba(255,255,255,.7)}
+    button.danger{ background:var(--danger) }
+
+    .grid{ display:grid; gap:16px; padding:18px }
+    .grid.cols-2{ grid-template-columns: 1.2fr .8fr }
+    @media(max-width:900px){ .grid.cols-2{ grid-template-columns: 1fr } }
+
+    .card{ background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px }
+    .card h3{ margin:0 0 12px 0; font-size:16px; color:#0f172a }
+
+    .row{ display:flex; gap:12px; flex-wrap:wrap }
+    label{ font-size:12px; color:var(--muted) }
+    input[type="text"], input[type="number"], input[type="date"], textarea{
+      width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; outline:0; background:#fff;
+      transition:border-color .15s, box-shadow .15s;
+    }
+    input:focus, textarea:focus{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(91,127,255,.15) }
+    textarea{ min-height:72px; resize:vertical }
+
+    /* Items table */
+    table{ width:100%; border-collapse:collapse }
+    thead th{ text-align:left; font-size:12px; color:var(--muted); font-weight:600; border-bottom:1px dashed var(--border); padding:8px }
+    tbody td{ padding:8px; border-bottom:1px dashed var(--border) }
+    tbody tr:last-child td{ border-bottom:none }
+    .num{ text-align:right }
+    .action{ text-align:center }
+
+    .badge{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:#065f46; background:#ecfdf5; border:1px solid #d1fae5; padding:6px 10px; border-radius:999px }
+
+    .totals{ display:grid; gap:8px; max-width:380px; margin-left:auto }
+    .totals .line{ display:flex; justify-content:space-between; gap:12px }
+    .totals .grand{ font-size:20px; font-weight:800 }
+
+    /* Logo upload */
+    .logo-wrap{ display:flex; align-items:center; gap:12px }
+    .logo{ width:72px; height:72px; border-radius:12px; border:1px dashed var(--border); background:#fff; display:grid; place-items:center; overflow:hidden }
+    .logo img{ width:100%; height:100%; object-fit:cover }
+    .hint{ font-size:12px; color:var(--muted) }
+
+    /* Print styles */
+    @media print{
+      header.topbar, .no-print{ display:none !important }
+      body{ background:#fff }
+      .app{ box-shadow:none; border:none }
+      .container{ padding:0 }
+      .card{ border:none; padding:0 }
+      .grid{ gap:8px; padding:0 }
+      .totals{ max-width:none }
+      input, textarea, .logo{ border:none }
+      a[href]:after{ content: "" }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="app">
+      <header class="topbar">
+        <div class="title">📄 <span style="opacity:.9">Invoice Billing web-Sourav Tk</span></div>
+        <div class="actions">
+          <button class="ghost no-print" id="btnNew">New</button>
+          <button class="secondary no-print" id="btnSave">Save</button>
+          <button class="no-print" id="btnLoad">Load</button>
+          <button class="no-print" id="btnPrint">Print / Download PDF</button>
+        </div>
+      </header>
+
+      <div class="grid cols-2">
+        <section class="card">
+          <h3></h3>
+          <div class="row">
+            <div class="logo-wrap">
+              <div class="logo" id="logoBox"><span class="hint">Logo</span></div>
+              <div>
+                <input class="no-print" type="file" id="logoInput" accept="image/*" />
+                <div class="hint"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:2">
+              <label>Company Name</label>
+              <input type="text" id="companyName" placeholder="" />
+            </div>
+            <div style="flex:1">
+              <label>Phone</label>
+              <input type="text" id="companyPhone" placeholder="" />
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:1">
+              <label>Address</label>
+              <textarea id="companyAddress" placeholder="Street, City, State, PIN"></textarea>
+            </div>
+            <div style="flex:1">
+              <label>GSTIN</label>
+              <input type="text" id="companyGST" placeholder="" />
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h3>Invoice Details</h3>
+          <div class="row">
+            <div style="flex:1">
+              <label>Invoice #</label>
+              <input type="text" id="invoiceNo" placeholder="INV-1001" />
+            </div>
+            <div style="flex:1">
+              <label>Date</label>
+              <input type="date" id="invoiceDate" />
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:1">
+              <label>Bill To (Customer)</label>
+              <input type="text" id="customerName" placeholder="Customer name" />
+            </div>
+            <div style="flex:1">
+              <label>Phone</label>
+              <input type="text" id="customerPhone" placeholder="Customer phone" />
+            </div>
+          </div>
+          <div class="row">
+            <div style="flex:1">
+              <label>Address</label>
+              <textarea id="customerAddress" placeholder="Customer address"></textarea>
+            </div>
+            <div style="flex:1">
+              <label>Notes</label>
+              <textarea id="notes" placeholder="Thank you for your business!"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" style="grid-column:1/-1">
+          <h3>Items</h3>
+          <div class="row no-print" style="align-items:flex-end">
+            <div style="flex:3">
+              <label>Item</label>
+              <input type="text" id="itemName" placeholder="Product / Service name" />
+            </div>
+            <div style="flex:1">
+              <label>HSN/SAC</label>
+              <input type="text" id="itemHsn" placeholder="Optional" />
+            </div>
+            <div style="flex:1">
+              <label>Qty</label>
+              <input type="number" id="itemQty" value="1" min="0" step="1" />
+            </div>
+            <div style="flex:1">
+              <label>Price (₹)</label>
+              <input type="number" id="itemPrice" value="0" min="0" step="0.01" />
+            </div>
+            <div style="flex:1">
+              <label>Tax %</label>
+              <input type="number" id="itemTax" value="0" min="0" step="0.01" />
+            </div>
+            <div>
+              <button id="addItem">Add</button>
+            </div>
+          </div>
+
+          <div style="overflow:auto">
+            <table id="itemsTable">
+              <thead>
+                <tr>
+                  <th style="width:32px">#</th>
+                  <th>Description</th>
+                  <th>HSN</th>
+                  <th class="num">Qty</th>
+                  <th class="num">Price (₹)</th>
+                  <th class="num">Tax %</th>
+                  <th class="num">Amount (₹)</th>
+                  <th class="action no-print">Action</th>
+                </tr>
+              </thead>
+              <tbody id="itemsBody"></tbody>
+            </table>
+          </div>
+
+          <div class="row" style="justify-content:space-between; align-items:center; margin-top:8px">
+            <div class="badge"> <kbd>Enter</kbd> </div>
+            <div class="row no-print">
+              <button class="danger" id="clearItems">Clear Items</button>
+            </div>
+          </div>
+
+          <div class="totals" style="margin-top:12px">
+            <div class="line"><div>Sub‑Total</div><div id="subTotal">₹0.00</div></div>
+            <div class="line"><div>Tax</div><div id="taxTotal">₹0.00</div></div>
+            <div class="line">
+              <div style="display:flex; gap:8px; align-items:center">
+                <span>Discount</span>
+                <input class="no-print" type="number" id="discount" value="0" min="0" step="0.01" style="width:120px"/>
+                <span class="hint">(₹)</span>
+              </div>
+              <div id="discountView">₹0.00</div>
+            </div>
+            <div class="line">
+              <div style="display:flex; gap:8px; align-items:center">
+                <span>Round Off</span>
+                <input class="no-print" type="checkbox" id="roundOff" />
+              </div>
+              <div id="roundOffView">—</div>
+            </div>
+            <div class="line grand"><div>Grand Total</div><div id="grandTotal">₹0.00</div></div>
+          </div>
+        </section>
+
+        <section class="card" style="grid-column:1/-1">
+          <h3>Terms</h3>
+          <textarea id="terms" placeholder="Goods once sold will not be taken back. Payment due upon receipt."></textarea>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Utilities =====
+    const Rs = v => `₹${Number(v).toFixed(2)}`;
+    const byId = id => document.getElementById(id);
+
+    // ===== Logo Upload =====
+    const logoBox = byId('logoBox');
+    byId('logoInput').addEventListener('change', e => {
+      const file = e.target.files?.[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        logoBox.innerHTML = `<img src="${reader.result}" alt="logo">`;
+        persist();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ===== Items Logic =====
+    const items = [];
+    const itemsBody = byId('itemsBody');
+
+    function addItem(obj){
+      const item = {
+        name: obj?.name || byId('itemName').value.trim(),
+        hsn: obj?.hsn || byId('itemHsn').value.trim(),
+        qty: Number(obj?.qty ?? byId('itemQty').value) || 0,
+        price: Number(obj?.price ?? byId('itemPrice').value) || 0,
+        tax: Number(obj?.tax ?? byId('itemTax').value) || 0,
+      };
+      if(!item.name){ alert('Enter item name'); return }
+      items.push(item); renderItems(); clearItemInputs();
+      focusName();
+    }
+
+    function removeItem(idx){ items.splice(idx,1); renderItems(); }
+
+    function renderItems(){
+      itemsBody.innerHTML = items.map((it,i)=>{
+        const amount = it.qty * it.price;
+        const taxAmt = amount * (it.tax/100);
+        const lineTotal = amount + taxAmt;
+        return `<tr>
+          <td>${i+1}</td>
+          <td>${escapeHtml(it.name)}</td>
+          <td>${escapeHtml(it.hsn||'')}</td>
+          <td class="num">${fmtQty(it.qty)}</td>
+          <td class="num">${it.price.toFixed(2)}</td>
+          <td class="num">${it.tax.toFixed(2)}</td>
+          <td class="num">${lineTotal.toFixed(2)}</td>
+          <td class="action no-print"><button class="danger" onclick="removeItem(${i})">Delete</button></td>
+        </tr>`
+      }).join('');
+      computeTotals();
+      persist();
+    }
+
+    function fmtQty(q){ return Number.isInteger(q) ? q : q.toFixed(2) }
+    function clearItemInputs(){ ['itemName','itemHsn','itemQty','itemPrice','itemTax'].forEach(id=>byId(id).value=''); byId('itemQty').value=1; byId('itemTax').value=0 }
+    function focusName(){ byId('itemName').focus() }
+
+    
+    ;['itemName','itemHsn','itemQty','itemPrice','itemTax'].forEach(id=>{
+      byId(id).addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); addItem(); }});
+    });
+    byId('addItem').addEventListener('click', ()=> addItem());
+    byId('clearItems').addEventListener('click', ()=>{ if(confirm('Clear all items?')){ items.length=0; renderItems(); }});
+
+    // ===== Totals =====
+    function computeTotals(){
+      let sub=0, tax=0;
+      items.forEach(it=>{ const amt=it.qty*it.price; sub+=amt; tax+= amt*(it.tax/100) });
+      const discount = Number(byId('discount').value)||0;
+      let grand = sub + tax - discount;
+      let roundText = '—';
+      if(byId('roundOff').checked){ const rounded = Math.round(grand); roundText = `${rounded>grand?'+':''}${(rounded-grand).toFixed(2)}`; grand = rounded }
+      byId('subTotal').textContent = Rs(sub);
+      byId('taxTotal').textContent = Rs(tax);
+      byId('discountView').textContent = Rs(discount);
+      byId('roundOffView').textContent = roundText;
+      byId('grandTotal').textContent = Rs(grand);
+    }
+    byId('discount').addEventListener('input', computeTotals);
+    byId('roundOff').addEventListener('change', computeTotals);
+
+    // ===== Save / Load (localStorage) =====
+    function collect(){
+      const data = {
+        company:{
+          name: byId('companyName').value,
+          phone: byId('companyPhone').value,
+          address: byId('companyAddress').value,
+          gst: byId('companyGST').value,
+          logo: logoBox.querySelector('img')?.src || ''
+        },
+        invoice:{
+          no: byId('invoiceNo').value,
+          date: byId('invoiceDate').value,
+          customer:{ name:byId('customerName').value, phone:byId('customerPhone').value, address:byId('customerAddress').value },
+          notes: byId('notes').value,
+          terms: byId('terms').value
+        },
+        items,
+        discount: Number(byId('discount').value)||0,
+        roundOff: byId('roundOff').checked
+      };
+      return data;
+    }
+
+    function persist(){ localStorage.setItem('invoice-app-data', JSON.stringify(collect())) }
+
+    function load(){
+      const raw = localStorage.getItem('invoice-app-data'); if(!raw) return alert('No saved invoice found');
+      try{
+        const data = JSON.parse(raw);
+        byId('companyName').value = data.company?.name||'';
+        byId('companyPhone').value = data.company?.phone||'';
+        byId('companyAddress').value = data.company?.address||'';
+        byId('companyGST').value = data.company?.gst||'';
+        if(data.company?.logo){ logoBox.innerHTML = `<img src="${data.company.logo}" alt="logo">` }
+
+        byId('invoiceNo').value = data.invoice?.no||'';
+        byId('invoiceDate').value = data.invoice?.date||'';
+        byId('customerName').value = data.invoice?.customer?.name||'';
+        byId('customerPhone').value = data.invoice?.customer?.phone||'';
+        byId('customerAddress').value = data.invoice?.customer?.address||'';
+        byId('notes').value = data.invoice?.notes||'';
+        byId('terms').value = data.invoice?.terms||'';
+
+        items.length = 0; (data.items||[]).forEach(it=>items.push(it));
+        byId('discount').value = data.discount||0;
+        byId('roundOff').checked = !!data.roundOff;
+        renderItems();
+      }catch(e){ alert('Failed to load saved data') }
+    }
+
+    byId('btnSave').addEventListener('click', ()=>{ persist(); alert('Saved! You can close and return later.'); });
+    byId('btnLoad').addEventListener('click', load);
+
+    // ===== New / Print =====
+    byId('btnNew').addEventListener('click', ()=>{
+      if(!confirm('Start a fresh invoice? This will clear current data.')) return;
+      localStorage.removeItem('invoice-app-data'); location.reload();
+    });
+    byId('btnPrint').addEventListener('click', ()=>{ window.print(); });
+
+    // ===== Helpers =====
+    function escapeHtml(str=''){ return str.replace(/[&<>"]+/g, s=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[s])) }
+
+    // ===== Init =====
+    (function init(){
+      // default date = today
+      const today = new Date().toISOString().slice(0,10);
+      byId('invoiceDate').value = today;
+      // try autoload
+      const raw = localStorage.getItem('invoice-app-data'); if(raw){ try{ load(); }catch{} }
+      computeTotals();
+    })();
+  </script>
+    <!-- Footer -->
+  <footer class="site-footer no-print">
+    © <span id="year"></span> Sourav Tk. All rights reserved. web:www.souravtk.in email:souravmsn@gmail.com
+    
+  </footer>
+</body>
+</html>
+
+</body>
+</html>
